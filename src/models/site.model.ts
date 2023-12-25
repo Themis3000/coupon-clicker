@@ -32,13 +32,13 @@ export async function clearSessionStorage(
   origin?: string,
 ): Promise<void> {
   origin = origin || new URL(page.url()).origin;
-  if (!origin) return;
+  if (!origin) throw "failed to create origin to clear session storage";
 
   const client = await page.target().createCDPSession();
   await client.send('Network.clearBrowserCache');
   await client.send('Storage.clearDataForOrigin', {
     origin,
     storageTypes:
-      'appcache, file_systems, indexeddb, local_storage, websql, cache_storage, shared_storage, storage_buckets',
+      'appcache, file_systems, indexeddb, local_storage, websql, cache_storage, shared_storage, storage_buckets, cookies',
   });
 }
